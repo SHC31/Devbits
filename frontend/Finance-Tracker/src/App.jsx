@@ -6,15 +6,18 @@ import {
   Navigate,
 } from 'react-router-dom';
 
-import Login from './pages/Auth/Login';
-import SignUp from './pages/Auth/SignUp';
+import Login from './pages/auth/Login';
+import SignUp from './pages/auth/SignUp';
 import Home from './pages/Dashboard/Home';
 import Income from './pages/Dashboard/Income';
 import Expense from './pages/Dashboard/Expense';
+import UserProvider from './context/userContext';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
-   <div>
+   <UserProvider>
+    <div>
     <Router>
       <Routes>
         <Route path="/" element={<Root/>} />
@@ -26,7 +29,17 @@ const App = () => {
 
       </Routes>
     </Router>
-   </div>
+    </div>
+
+    <Toaster 
+    toastOptions={{
+      className:"",
+      style:{
+        fontSize:'13px'
+      },
+    }}
+    />
+   </UserProvider>
   )
 }
 
