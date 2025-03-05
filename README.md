@@ -55,16 +55,21 @@ Many individuals struggle to manage their personal finances due to the lack of a
 ## **4. Screenshots**  
 
 ### **Dashboard**  
-![Dashboard_page](<WhatsApp Image 2025-03-06 at 01.04.16_a79fc5b9.jpg>)![Dashboard_page](<WhatsApp Image 2025-03-06 at 01.04.16_cc8047d1.jpg>)
+![Dashboard_page](https://github.com/user-attachments/assets/f75af79d-fa7d-4a28-9a7e-0dc34a0c2b15)
+![Dashboard_page](https://github.com/user-attachments/assets/b5d965fd-5586-4d89-811d-73da473776b9)
+
 
 ### **Income**  
-![Income_page](https://pplx-res.cloudinary.com/image/upload/v1741203093/user_uploads/jKTbDTasvOFPsEE/Screenshot-2025-03-06-005550.jpg)  
+![Income_page](https://github.com/user-attachments/assets/1259cb40-315e-400e-9c5e-0469d6cf50e0)
+
 
 ### **Expenses**
-![Expensepage](<WhatsApp Image 2025-03-06 at 01.04.16_f086b437.jpg>)
+![Expensepage](https://github.com/user-attachments/assets/e7c9ba02-1fa5-4ac2-8f26-5822dca3dc48)
+
 
 ### **Transactions**  
-![Transactions_page](https://pplx-res.cloudinary.com/image/upload/v1741203094/user_uploads/nqLZkeEvruNVHdy/Screenshot-2025-03-06-005624.jpg)  
+![Transactions_page](https://github.com/user-attachments/assets/39353591-6d21-40b6-9a85-cbbae9ccd511)
+
 
 ---
 
