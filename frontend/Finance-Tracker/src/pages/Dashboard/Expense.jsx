@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { userUserAuth } from '../../hooks/useUserAuth';
+import { useUserAuth } from '../../hooks/useUserAuth';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import toast from 'react-hot-toast';
 import { API_PATHS } from '../../utils/apiPaths';
@@ -11,7 +11,7 @@ import ExpenseList from '../../components/Expense/ExpenseList';
 import DeleteAlert from '../../components/DeleteAlert';
 
 const Expense = () => {
-  userUserAuth();
+  useUserAuth();
 
   const [expenseData, setExpenseData] = useState([]);
     const [loading, setLoading] =useState(false);
@@ -103,7 +103,7 @@ const Expense = () => {
           const url = window.URL.createObjectURL(new Blob ([response.data]))
           const link= document.createElement("a");
           link.href =url;
-          link.setAttribute("download", "expense_details.xlsx");
+          link.setAttribute("download", "expense_details.csv");
           document.body.appendChild(link);
           link.click();
           link.parentNode.removeChild(link);

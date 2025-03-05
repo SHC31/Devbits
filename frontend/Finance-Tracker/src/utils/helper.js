@@ -17,18 +17,24 @@ export const getInitials = (name) => {
     return initials.toUpperCase();
 };
 
-export const addThousandsSeparator = (num) => {
-    if(num == null || isNaN(num)) return "";
+// export const addThousandsSeparator = (num) => {
+//     if(num == null || isNaN(num)) return "";
 
-    const [integerPart, fractionalPart] = num.toString().spilt(".");
-    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return fractionalPart ? `${formattedInteger}.${fractionalPart}` : formattedInteger;
+//     const [integerPart, fractionalPart] = num.toString().spilt(".");
+//     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     return fractionalPart ? `${formattedInteger}.${fractionalPart}` : formattedInteger;
+// };
+
+export const addThousandsSeparator = (num) => {
+    if (num === null || num === undefined) return '';
+    return num.toString().split('').reverse().join('').replace(/(\d{3}(?!$))/g, '$1,').split('').reverse().join('');
 };
 
 export const prepareExpenseBarChartData =(data=[]) =>{
     const charData = data.map((item)=>({
         category: item?.category,
         amount: item?.amount,
+        month: moment(item?.date).format('Do MMM'),
     }));
 
     return charData;
@@ -39,6 +45,7 @@ export const prepareIncomeBarChartData = (data=[])=>{
 
     const charData = sortedData.map((item)=>({
         month: moment(item?.date).format('Do MMM'),
+        category:item?.source,
         amount:item?.amount,
         source:item?.source
     }));

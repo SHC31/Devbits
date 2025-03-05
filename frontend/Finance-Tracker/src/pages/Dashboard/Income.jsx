@@ -8,11 +8,11 @@ import AddIncomeForm from '../../components/Income/AddIncomeForm';
 import toast from 'react-hot-toast';
 import IncomeList from '../../components/Income/IncomeList';
 import DeleteAlert from '../../components/DeleteAlert';
-import { userUserAuth } from '../../hooks/useUserAuth';
+import { useUserAuth } from '../../hooks/useUserAuth';
 
 
 const Income = () => {
-  userUserAuth();
+  useUserAuth();
 
 
   const [incomeData, setIncomeData] = useState([]);
@@ -105,7 +105,7 @@ const Income = () => {
         const url = window.URL.createObjectURL(new Blob ([response.data]))
         const link= document.createElement("a");
         link.href =url;
-        link.setAttribute("download", "income_details.xlsx");
+        link.setAttribute("download", "income_details.csv");
         document.body.appendChild(link);
         link.click();
         link.parentNode.removeChild(link);
