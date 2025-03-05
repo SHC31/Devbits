@@ -1,4 +1,7 @@
-const xlsx = require("xlsx");
+//const xlsx = require("xlsx");
+const fs = require("fs");
+const path = require("path");
+const fastCsv = require("fast-csv");
 const Income = require("../models/Income");
 
 // Add Income Source
@@ -9,7 +12,7 @@ exports.addIncome = async (req, res) => {
         const { icon, source, amount, date } = req.body;
 
         // Validation: Check for missing fields
-        if(!icon || !source || !amount || !date){
+        if(!source || !amount || !date){
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -40,7 +43,7 @@ exports.getAllIncome = async (req, res) =>  {
     }
 }
 
-// Delete Income Source
+//Delete Income Source
 exports.deleteIncome = async (req, res) => {
     try{
         await Income.findByIdAndDelete(req.params.id);
@@ -49,27 +52,36 @@ exports.deleteIncome = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
 }
 };
-// Download Excel of Income Source
-exports.downloadIncomeExcel = async (req, res) => {
-    const userId = req.user._id;
 
-    try{
-        const income = await Income.find({ userId }).sort({ date: -1 });
-        // Prepare data for Excel
-        const data = income.map((item) => ({
-            
+exports.downloadIncomeCSV = async (req, res) => {
+    const userId = req.user._id;
+    try {
+        const incomes = await Income.find({ userId }).sort({ date: -1 });
+
+        if (!incomes.length) {
+            return res.status(404).json({ message: "No income data found" });
+        }
+
+        const filePath = path.resolve("income_details.csv");
+
+        const ws = fs.createWriteStream(filePath);
+        fastCsv
+            .write(incomes.map(item => ({
                 Source: item.source,
                 Amount: item.amount,
                 Date: item.date
-            
-        }));
-
-        const wb = xlsx.utils.book_new();
-        const ws = xlsx.utils.json_to_sheet(data);
-        xlsx.utils.book_append_sheet(wb, ws, "Income");
-        xlsx.writeFile(wb, "income_details.xlsx");
-        res.download("income_details.xlsx");
-     } catch(error) {
-        res.status(500).json({ message: "Server Error" });
+            })), { headers: true })
+            .pipe(ws)
+            .on("finish", () => {
+                res.setHeader("Content-Type", "text/csv");  // 🛠️ Fix MIME Type
+                res.setHeader("Content-Disposition", 'attachment; filename="income_details.csv"');
+                
+                res.download(filePath, "income_details.csv", (err) => {
+                    if (err) console.error("Download error:", err);
+                    fs.unlinkSync(filePath); // Delete file after download
+                });
+            });
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
-}
+};

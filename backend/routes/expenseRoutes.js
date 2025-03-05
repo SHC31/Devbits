@@ -3,7 +3,7 @@ const{
       addExpense,
       getAllExpense,
       deleteExpense,
-      downloadExpenseExcel
+      downloadExpenseCSV
 } = require("../controllers/expenseController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/add", protect, addExpense);
 router.get("/get", protect, getAllExpense);
-router.get("/downloadExcel", protect, downloadExpenseExcel);
+router.get("/expense_details.csv", protect, downloadExpenseCSV);
 router.delete("/:id", protect, deleteExpense);
 
 module.exports = router;

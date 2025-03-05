@@ -1,5 +1,6 @@
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");    1
+const jwt = require("jsonwebtoken");  
+const bcrypt = require("bcryptjs");
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -20,12 +21,14 @@ exports.registerUser = async function (req, res) {
         if (existingUser) {
             return res.status(400).json({ message: "Email already in use" });
         }
+         // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create the User
         const user = await User.create({
             fullName,
             email,
-            password,
+            password: hashedPassword,
             profileImageUrl,
         });
         res.status(201).json({
@@ -48,8 +51,14 @@ exports.loginUser = async (req, res) => {
   try{
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });  
     }
+    // Check if password matches
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+    }
+
     res.status(200).json({
       id: user._id,
       user,

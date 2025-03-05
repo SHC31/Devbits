@@ -1,4 +1,7 @@
-const xlsx = require("xlsx");
+//const xlsx = require("xlsx");
+const fs = require("fs");
+const path = require("path");
+const fastCsv = require("fast-csv");
 const Expense = require("../models/Expense");
 
 // Add Expense Source
@@ -49,25 +52,34 @@ exports.deleteExpense = async (req, res) => {
 }
 };
 
-// Download Excel of Expense Source
-exports.downloadExpenseExcel = async (req, res) => {
+exports.downloadExpenseCSV = async (req, res) => {
     const userId = req.user._id;
-
     try {
-        const expense = await Expense.find({ userId }).sort({ date: -1 });
-        // Prepare data for Excel
-        const data = expense.map((item) => ({
-            category: item.category,
-            Amount: item.amount,
-            Date: item.date
-        }));
+        const expenses = await Expense.find({ userId }).sort({ date: -1 });
 
-        const wb = xlsx.utils.book_new();
-        const ws = xlsx.utils.json_to_sheet(data);
-        xlsx.utils.book_append_sheet(wb, ws, "Expense");
-        xlsx.writeFile(wb, 'expense_details.xlsx');
-        res.download('expense_details.xlsx');
+        if (!expenses.length) {
+            return res.status(404).json({ message: "No expense data found" });
+        }
+
+        const filePath = path.resolve("expense_details.csv");
+        const ws = fs.createWriteStream(filePath);
+        fastCsv
+            .write(expenses.map(item => ({
+                Category: item.category,
+                Amount: item.amount,
+                Date: item.date
+            })), { headers: true })
+            .pipe(ws)
+            .on("finish", () => {
+                res.setHeader("Content-Type", "text/csv");
+                res.setHeader("Content-Disposition", 'attachment; filename="expense_details.csv"');
+                
+                res.download(filePath, "expense_details.csv", (err) => {
+                    if (err) console.error("Download error:", err);
+                    fs.unlinkSync(filePath); // Delete file after download
+                });
+            });
     } catch (error) {
-        res.status(500).json({ message: "Server Error" });
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
-}
+};
