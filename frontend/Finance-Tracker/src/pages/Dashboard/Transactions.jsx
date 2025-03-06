@@ -32,7 +32,7 @@ const TransactionsPage = () => {
       console.log("Making API request to fetch transactions with params:", { search, startDate, endDate });
 
       const response = await axios.get(
-        "http://localhost:8000/api/v1/transaction",
+        "https://fin-tracker-backend.onrender.com/api/v1/transaction",
         {
           headers: { Authorization: `Bearer ${token}` },
           params: { search, startDate, endDate },
