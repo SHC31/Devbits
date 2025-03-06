@@ -45,7 +45,7 @@ Many individuals struggle to manage their personal finances due to the lack of a
 
 ## **3. Hosted Links**  
 
-🚀 **Live Demo:** [Insert Deployment URL Here]  
+🚀 **Live Demo:** http://localhost:5173/
 
 🔗 **GitHub Repository:** https://github.com/SHC31/Devbits.git
 
